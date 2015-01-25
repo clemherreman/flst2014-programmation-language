@@ -6,7 +6,7 @@ This repository contains the material I'm using at FLST, Lille, France.
 Subjects
 --------
 
-* [Introduction to OOP](introduction_to_oop/Introduction à la POO.md)
+* [Introduction to OOP](introduction_to_oop/)
 
 License
 -------
