@@ -87,7 +87,7 @@ class StudentListBis
 }
 ```
 
-*\* Etant très mauvais mécanicien, des erreurs manifestes peuvent s'être glissées dans cette analogie.*
+\* Etant très mauvais mécanicien, des erreurs manifestes peuvent s'être glissées dans cette analogie.
 
 ### Héritage
 
