@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FLST 2014 - Anatomy of a (some) class</title>
+    <meta name="description" content="Fancy cheatsheet for Composer, the dependency manager of PHP" />
+    <meta name="keywords" content="help, documentation, cheat sheet, composer" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.css?v2">
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+    var schema = '';
+    var hints = {
+      "home": "This is an interactive guide for exploring various important properties of a class."
+             +" <br/> <br/> You can access information about properties by <strong>mousing over</strong>.",
+        "class-declaration": "<h3>Déclaration de classe</h3>"+
+                             "Une classe est déclarée par le mot-clef <code>class</code>, suivie du nom de la classe, ici <code>Rectangle</code>. "+
+                             "On ouvre ensuite une accolade <code>{</code>. <br/>"+
+                             "<pre class=\"composer\">class FooBar \n{\n    \/\/ Here we find the class declaration\n}</pre>",
+        "class-attributes": "<h3>Attributs</h3>Les attributs sont les <strong>données qui caractérisent un objet.</strong>. <br />"+
+                            "Ici <code>private</code> indique que ces attributs ne sont pas accessibles depuis le code exterieur à la classe <code>Rectangle</code> <br>"+
+                            "C'est généralement une bonne pratique de mettre les attributs <code>private</code> par defaut. "+
+                            "Cela participe à <strong>l'encapsulation.</strong> <br>"+
+                            "Dans notre exemple, on peut définir un rectangle avec une <em>longueur et une largeur</em>. <br />"+
+                            "On aurait aussi pu définir un cercle <em>avec un rayon</em> (ou un diamètre, selon les points de vue)",
+        "class-construct-def": "<h3>Constructeur</h3>"+
+                               "Le constructeur est une methode spéciale d'une classe. <br>Il est appelé lors de l'instanciation d'un objet "+
+                               "e.g. <code>$rec = new Rectangle(4, 3);</code> <br />"+
+                               "Le constructeur a pour tache d'<strong>initialiser l'objet, et de définir les valeurs de ses attributs.</strong> "+
+                               "Un constructeur correctement écrit laisse l'objet dans un état <em>valide</em>, "+
+                               "e.g. notre constructeur de <code>Rectangle</code> ne devrait pas accepter <code>0</code> comme longueur ou largeur.",
+        "class-construct-impl": "<h3>Implementation du constructeur</h3>"+
+                                "Il ne faut pas oublier de <strong>faire quelque chose avec ce qui est passé au constructeur</strong>, "+
+                                "faute de quoi, l'objet créé sera dans un état <em>invalide</em>.<br>"+
+                                "Dans notre cas, on assigne la <code>$longueur</code> passée en paramètre à notre rectangle "+
+                                "via <code>$this->long = $longueur</code>. <br><br>Dans le cas contraire, <code>$this->longueur</code> serait <code>null</code>"+
+                                "et <code>$rec->calculPerimetre()</code> aurait un comportement non désiré (voire totalement étrange).",
+        "class-method-def":     "<h3>Méthodes</h3>"+
+                                "Une méthode <strong>est une fonction attachée à un objet</strong>. "+
+                                "On l'appelle via l'operateur \"object operator\", a.k.a. <code>-></code>. <br >"+
+                                "Exemple: <code>$rec->calculPerimetre()</code> <br>"+
+                                "On peut également, à l'appel, lui passer des paramètres utiles à l'execution de la methode, e.g. "+
+                                "<code>$weapon->fire(3);</code>. Ici on indique à l'arme de tirer 3 fois.",
+        "class-method-return":  "<h3>return</h3>"+
+                                "Comme une fonction, certaines méthodes <strong>retournent une valeur</strong>. "+
+                                "Il ne faut pas oublier d'indiquer qu'on souhaite retourner une valeur, via <code>return</code> car, "+
+                                "dans le cas contraire, la valeur spéciale <code>null</code> est retournée.",
+        "abstract-declaration": "<h3>Classe abstraite</h3>"+
+                                "Une classe abstraite symbolise <strong>une classe dont tous les comportements ne sont pas connus à l'avance.</strong> <br>"+
+                                "Ici : toutes les adresses peuvent être formattées et imprimées sur une enveloppe, mais chaque type d'adresse "+
+                                "s'y prend différemment : adresse française, britannique, américaine… <br>"+
+                                "On indique à PHP qu'une classe est abstraite via le mot-clef <code>abstract</code>, placé <strong>avant</strong> "+
+                                "le mot-clef <code>class</code>",
+        "abstract-attributes":  "<h3>Attributs</h3>"+
+                                "Les attributs fonctionnent comme pour une classe simple. <br>"+
+                                "On remarque ici la portée <code>protected</code>. Elle indique que les attributs tels <code>$this->city</code> "+
+                                "<strong>seront accessibles et utilisables depuis les classes filles</strong> (classes héritant de <code>Address</code>) <br>",
+        "abstract-construct":   "<h3>Constructeur</h3>"+
+                                "Strictement aucune différence avec un constructeur de classe simple.",
+        "abstract-method":      "<h3>Méthode abstraite</h3>"+
+                                "Une methode abstraite est une méthode dont on peut décrire le nom, et éventuellement les paramètres dont "+
+                                "elle a besoin, mais <strong>pas son implémentation exacte</strong>, car celle-ci sera différente "+
+                                "pour chaque classe en héritant. <br><br>"+
+                                "On indique cette spécificité avec le mot-clef <code>abstract</code> <strong>avant le nom de la méthode</strong><br><br>"+
+                                "<em>Dès qu'une classe comporte une méthode abstraite, cette classe devient également abstraite.</em>"
+    };
+
+      $(document).ready(function(){
+        $.get('composer-schema.json', function(data){
+            schema = data;
+        }, 'json');
+
+        $('.hint').html(hints['home']);
+
+        $('.composer .pair').mouseover(function(e){
+          var el = this;
+          var topPx = $("#header").height() + 61;
+          if ($(document).scrollTop() >= topPx) {
+            topPx = $(document).scrollTop();
+          }
+
+          $('.doc').css('top', topPx + 'px')
+          var prefix = (undefined != $('.key', el).attr('data-prefix'))? $('.key', el).attr('data-prefix'):'';
+          var title = $('.key', el).html().replace(/"/g, '');
+          var key = prefix+title;
+
+          $('.title').html(title);
+          if (schema && (undefined != schema['properties'][key])) {
+            var typeData = '';
+            if (undefined != schema['properties'][key]['type']) {
+              typeData = schema['properties'][key]['type'];
+              if (typeData.constructor.toString().indexOf("Array") > -1) {
+                typeData = typeData.join(', ');
+              }
+            }
+            $('.type').html(typeData);
+          } else {
+            $('.type').html('');
+          }
+
+          $('.hint').html(hints[key]);
+        });
+      });
+    </script>
+
+    <style type="text/css">
+      #header p {
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 32px;
+      }
+
+      .composer .pair {
+        cursor:pointer;
+      }
+
+      .composer .pair:hover {
+        background-color:white;
+        font-weight: bold;
+      }
+      .pair {
+        padding:0px;
+        margin:0px;
+      }
+
+      .doc {
+        position:absolute;
+        #top:50px;
+        font-size:18px;
+        width:400px;
+        line-height:32px;
+      }
+
+      .title {
+        font-weight: bold;
+      }
+
+      .type {
+        font-size: 17px;
+        font-style: italic;
+      }
+
+      code {
+          border: 1px solid #ccc;
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          border-radius: 3px;
+          padding: 0px 4px;
+          display: inline-block;
+          line-height: 125%;
+          margin: 0 2px;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">FLST 2014 - Anatomy of a (some) class</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <div class="row">
+          <div class="span12" id="header">
+            <h2>Cheat sheet - Anatomy of a (some) class</h2>
+            <p>
+                Object-oriented programming is a design philosophy.
+                Here is its syntax in PHP, however the most important is the semantic,
+                not the comas, parenthesis and brackets
+            </p>
+          </div>
+        </div>
+        <div class="row" id="documentation">
+          <div class="span7">
+              <h2>Anatomy of a typical class</h2>
+              <pre class="composer">
+<span class="pair">class Rectangle
+{<span class="key" data-prefix="class-declaration"></span></span>
+<span class="pair">    private $long;
+    private $larg;<span class="key" data-prefix="class-attributes"></span></span>
+
+<span class="pair">    public function __construct($longueur, $largeur)
+    {<span class="key" data-prefix="class-construct-def"></span></span>
+<span class="pair">        $this->long = $longueur;
+        $this->larg = $largeur;<span class="key" data-prefix="class-construct-impl"></span></span>
+<span class="pair">    }<span class="key" data-prefix="class-construct-def"></span></span>
+
+<span class="pair">    public function calculPerimetre()
+    {
+        $perimetre = ($this->long + $this->larg) * 2;
+<span class="key" data-prefix="class-method-def"></span></span>
+<span class="pair">        return $perimetre;<span class="key" data-prefix="class-method-return"></span></span>
+    }
+<span class="pair">}<span class="key" data-prefix="class-declaration"></span></span>
+              </pre>
+
+              <h2>Anatomy of an abstract class</h2>
+              <pre class="composer">
+<span class="pair">abstract class Address
+{<span class="key" data-prefix="abstract-declaration"></span></span>
+<span class="pair">    protected $number;
+    protected $wayType;
+    protected $wayName;
+    protected $zipcode;
+    protected $city;<span class="key" data-prefix="abstract-attributes"></span></span>
+
+<span class="pair">    public function __construct($number, $wayType, $wayName,
+                                $zipcode, $city)
+    {
+        $this->number = $number;
+        $this->wayType = $wayType;
+        $this->wayName = $wayName;
+        $this->zipcode = $zipcode;
+        $this->city = $city;
+    }<span class="key" data-prefix="abstract-construct"></span></span>
+
+<span class="pair">    abstract public function formatForPostalService();<span class="key" data-prefix="abstract-method"></span></span>
+}
+          </pre>
+          </div>
+          <div class="span4">
+            <div class="doc">
+                <p class="title"></p>
+                <p class="type"></p>
+                <p class="required"></p>
+                <p class="hint"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+            Written by Clément Herreman, for FLST, 2014.<br />
+            Huge thanks to <a href="http://jolicode.com">JoliCode</a>, from who I stole everything
+            in their <a href="http://composer.json.jolicode.com/">composer.json cheat-sheet</a>
+      </footer>
+    </div>
+  </body>
+</html>
