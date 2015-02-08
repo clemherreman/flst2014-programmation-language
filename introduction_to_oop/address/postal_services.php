@@ -1,15 +1,16 @@
 <?php
-require __DIR__.'/Address.php';
+require_once __DIR__.'/Address.php';
+require_once __DIR__.'/FrenchAddress.php';
+require_once __DIR__.'/UkAddress.php';
 
-$address = new Address(41, 'rue', 'du port', '59800', 'Lille');
+$addresses = array(
+    new UkAddress(23, 'circus', 'Piccadilly', 'W1D', 'London'),
+    new FrenchAddress(41, 'rue', 'du port', '59800', 'Lille'),
+    new UkAddress(10, 'street', 'Downing', 'SW1A 2AA', 'London')
+);
 
-echo <<<STRING
-French postal services:
+foreach($addresses as $addr) {
+    echo $addr->formatForPostalService().PHP_EOL;
+}
 
-{$address->formatForFrenchPostalService()}
-//
-//UK postal services:
-//
-//{$address->formatForUkPostalService()}
 
-STRING;
