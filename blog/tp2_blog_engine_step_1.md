@@ -28,11 +28,12 @@ Exemple d'utilisation de la classe `MagicBox`
 
 ```
 $blogPost = new BlogPost(1337, 'My secret welsh recipe');
-$blogPost->setText('Take a pound of cheddar, melt it. ……(rest of the recipe)…… Eat everything. Get a heartstroke');
+$blogPost->setText('Take a pound of cheddar, melt it. ...(rest of the recipe)... Eat everything. Get a heartstroke');
 
 $magicBox = new MagicBox();
 $magicBox->putBlogPost($blogPost);
-$magixBox->save();
+
+$magicBox->save();
 ```
 
 Bien plus tard, sur une autre page…
