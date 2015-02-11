@@ -4,11 +4,13 @@ class BlogPost
     private $id;
     private $title;
     private $text;
+    private $publicationDate;
 
     public function __construct($id, $title)
     {
         $this->id = $id;
         $this->title = $title;
+        $this->publicationDate = new \DateTime('now');
     }
 
     /**
