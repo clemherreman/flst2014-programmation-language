@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/BlogPost.php';
+
 class MagicBox 
 {
     private $blogPosts = array();
@@ -19,6 +21,18 @@ class MagicBox
     public function save()
     {
         $this->writeToDb(serialize($this->blogPosts));
+    }
+
+    public function retrieveById($blogPostId) {
+        $allBlogPosts = $this->retrieveAllBlogPosts();
+
+        foreach($allBlogPosts as $blogPost) {
+            if ($blogPost->getId() == $blogPostId) {
+                return $blogPost;
+            }
+        }
+
+        return null;
     }
 
     public function retrieveAllBlogPosts()
