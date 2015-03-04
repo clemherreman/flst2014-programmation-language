@@ -13,6 +13,11 @@ class BlogPost
         $this->publicationDate = new \DateTime('now');
     }
 
+    public function getPublicationDate()
+    {
+        return $this->publicationDate;
+    }
+
     /**
      * @return mixed
      */

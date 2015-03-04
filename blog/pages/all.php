@@ -9,13 +9,8 @@ $blogPosts = $magicBox->retrieveAllBlogPosts();
 <!DOCTYPE html>
 <html>
 <head lang="en">
-  <meta charset="UTF-8">
-  <title>Howdy fellow, and welcome to Uncle Stew's secret recipes website!!</title>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Howdy fellow, and welcome to Uncle Stew's secret recipes website!!</title>
 
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +37,9 @@ $blogPosts = $magicBox->retrieveAllBlogPosts();
         <?php foreach ($blogPosts as $post): ?>
             <div class="blog-post">
                 <h2 class="blog-post-title">
-                    <?php echo $post->getTitle() ?>
+                    <a href="post.php?id=<?php echo $post->getId() ?>">
+                        <?php echo $post->getTitle() ?>
+                    </a>
                 </h2>
                 <p class="blog-post-meta">PUBLICATION DATE</p>
                 <p>
