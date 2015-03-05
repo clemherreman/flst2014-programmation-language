@@ -1,4 +1,4 @@
-BEGIN TRANSACTION;
+
 DROP TABLE IF EXISTS pet;
 DROP TABLE IF EXISTS person_pet;
 DROP TABLE IF EXISTS person;
@@ -28,4 +28,4 @@ CREATE TABLE person (
 );
 INSERT INTO `person` VALUES (0,'Giselle','Bonvoisin',78);
 INSERT INTO `person` VALUES (1,'Jean-Pierre','Martin',72);
-COMMIT;
+
